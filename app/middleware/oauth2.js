@@ -70,7 +70,7 @@ function router(config) {
     hostedDomain: config.oauth2.hostedDomain || '',
     accessType: 'offline',
 
-  }, function (accessToken, refreshToken, profile, cb) {
+  }, function (accessToken, refreshToken, profile, cb, config) {
     // If hosteddomain is set, verify that user matches hosted domain, or else just pass through
 
     if config.oauth2.hostedDomain != '' {
