@@ -70,10 +70,10 @@ function router(config) {
     hostedDomain: config.oauth2.hostedDomain || '',
     accessType: 'offline',
 
-  }, function (accessToken, refreshToken, profile, cb, config) {
+  }, function (accessToken, refreshToken, profile, cb) {
     // If hosteddomain is set, verify that user matches hosted domain, or else just pass through
 
-    if config.oauth2.hostedDomain != '' {
+    if (config.oauth2.hostedDomain != '') {
       // Check to see if user matches hosted domain, and pass or fail
       if (profile._json.hd === config.oauth2.hostedDomain) {
         // Extract the minimal profile information we need from the profile object
