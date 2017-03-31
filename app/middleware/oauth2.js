@@ -67,13 +67,32 @@ function router(config) {
     clientID: config.oauth2.client_id,
     clientSecret: config.oauth2.client_secret,
     callbackURL: config.oauth2.callback,
-    hostedDomain: config.hostedDomain || '',
+    hostedDomain: config.oauth2.hostedDomain || '',
     accessType: 'offline',
 
   }, function (accessToken, refreshToken, profile, cb) {
-    // Extract the minimal profile information we need from the profile object
-    // provided by Google
-    cb(null, extractProfile(profile));
+    // If hosteddomain is set, verify that user matches hosted domain, or else just pass through
+
+    if config.oauth2.hostedDomain != '' {
+      // Check to see if user matches hosted domain, and pass or fail
+      if (profile._json.hd === config.oauth2.hostedDomain) {
+        // Extract the minimal profile information we need from the profile object
+        // provided by Google
+        cb(null, extractProfile(profile));
+      } else {
+        // Redirect to login page and show error
+        res.redirect(403, '/login');
+        res.json({
+          status  : 0,
+          message : config.lang.api.invalidCredentials
+        });
+      }
+    } else {
+      // Extract the minimal profile information we need from the profile object
+      // provided by Google
+      cb(null, extractProfile(profile));
+    }
+
   }));
 
   passport.serializeUser(function (user, cb) {
