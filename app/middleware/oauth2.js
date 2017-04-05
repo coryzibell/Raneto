@@ -75,17 +75,13 @@ function router(config) {
 
     if (config.oauth2.hostedDomain != '') {
       // Check to see if user matches hosted domain, and pass or fail
-      if (profile._json.hd === config.oauth2.hostedDomain) {
+      if (profile._json.domain === config.oauth2.hostedDomain) {
         // Extract the minimal profile information we need from the profile object
         // provided by Google
         cb(null, extractProfile(profile));
       } else {
         // Redirect to login page and show error
-        res.redirect(403, '/login');
-        res.json({
-          status  : 0,
-          message : config.lang.api.invalidCredentials
-        });
+        cb(console.log('Domain Mismatch'));
       }
     } else {
       // Extract the minimal profile information we need from the profile object
